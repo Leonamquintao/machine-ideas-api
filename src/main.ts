@@ -10,11 +10,12 @@ const host: string = process.env.HOST;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(port);
-  Logger.log(`Server running in ${host}:${port}`);
+  Logger.log(`Server running in ${host}:${port}`, 'Main.ts');
 
   if(module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
+
 }
 bootstrap();
