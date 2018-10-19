@@ -12,6 +12,11 @@ export class UserController {
     return this.userService.getUsers();
   }
 
+  @Post('login')
+  public login(@Body() data: any) {
+    return this.userService.login(data);
+  }
+
   @Get(':id')
   public getUser(@Param('id') id: string) {
     return this.userService.getUser(id);
