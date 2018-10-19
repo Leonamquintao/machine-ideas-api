@@ -18,4 +18,13 @@ export class DatabaseService {
       Logger.log(`Unable to connect to Mongo Database ${err}`, 'DatabaseService');
     }
   }
+
+  public async desconnect(): Promise<void> {
+    try {
+      Logger.log(`Desconnected to mongodb`, 'SUCCESS');
+      return this.db.close();
+    } catch (err) {
+      Logger.log(`Unable to desconnect to Mongo Database ${err}`, 'DatabaseService');
+    }
+  }
 }

@@ -4,5 +4,6 @@ export interface IdeaDTO {
   image?: string;
   author: string;
   user_id: string;
+  comments?: Array<any>;
   created_at: Date;
 }
