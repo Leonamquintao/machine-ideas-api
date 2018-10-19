@@ -20,7 +20,7 @@ export class UserService {
     } else { return this.userResponseObject(user); }
   }
 
-  public async getUsers(): Promise <string[]> {
+  public async getUsers(): Promise <UserDTO[]> {
     let db = await this.db.connect();
     let result = await db.collection(COLLECTION).find().toArray();
     this.db.desconnect();
