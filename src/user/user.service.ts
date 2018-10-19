@@ -66,4 +66,8 @@ export class UserService {
     return data;
   }
 
+  // private async getToken(id, email): Promise <any> {
+  //   return await jwt.sign({ id: id, email: email }, process.env.SECRET, { expiresIn: '7d' });
+  // }
+
 }
