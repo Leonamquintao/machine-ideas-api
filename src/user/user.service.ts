@@ -50,7 +50,7 @@ export class UserService {
         else resolve(rows.ops);
       });
     })
-    
+
     return userPromise;
   }
 
