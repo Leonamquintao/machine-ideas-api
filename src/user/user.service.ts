@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserDTO } from './user.dto';
 import { DatabaseService } from '../shared/database/database.service';
+
+import 'dotenv/config';
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
 const ObjectId = require('mongodb').ObjectId;
 const COLLECTION: string = "users";
@@ -17,7 +20,10 @@ export class UserService {
 
     if(!user || !(await this.comparePassword(data.password, user[0].password))) {
       return { status: 401, message: 'Invalid user/password!' }
-    } else { return this.userResponseObject(user); }
+    } else {
+      user[0].token = await this.geToken(user[0]._id)
+      return this.userResponseObject(user);
+    }
   }
 
   public async getUsers(): Promise <UserDTO[]> {
@@ -37,8 +43,15 @@ export class UserService {
   public async createUser(data: Partial<UserDTO>): Promise <any> {
     let db = await this.db.connect();
     data.password = await this.hashPassword(data.password);
-    let insert = await db.collection(COLLECTION).insertOne(data);
-    return insert;
+
+    let userPromise = new Promise((resolve, reject) => {
+      db.collection(COLLECTION).insertOne(data, (err, rows) => {
+        if(err) reject(err);
+        else resolve(rows.ops);
+      });
+    })
+    
+    return userPromise;
   }
 
   public async updateUser(id: string, data: Partial<UserDTO>): Promise <any> {
@@ -66,8 +79,9 @@ export class UserService {
     return data;
   }
 
-  // private async getToken(id, email): Promise <any> {
-  //   return await jwt.sign({ id: id, email: email }, process.env.SECRET, { expiresIn: '7d' });
-  // }
+  private async geToken(id): Promise <any> {
+    let token = await jwt.sign({ data: id }, process.env.SECRET, { expiresIn: '7d' });
+    return token
+  }
 
 }

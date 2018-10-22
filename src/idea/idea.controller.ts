@@ -1,6 +1,7 @@
-import { Get, Post, Put, Delete, Param, Body, Controller } from '@nestjs/common';
+import { Get, Post, Put, Delete, Param, Body, Controller, UseGuards } from '@nestjs/common';
 import { IdeaService } from './idea.service';
 import { IdeaDTO } from './idea.dto';
+import { AuthGuard } from '../shared/http/auth.guard';
 
 @Controller('ideas')
 export class IdeaController {
@@ -8,6 +9,7 @@ export class IdeaController {
   constructor(private ideaService: IdeaService) {}
 
   @Get()
+  @UseGuards(new AuthGuard())
   public getIdeas() {
     return this.ideaService.getIdeas();
   }
