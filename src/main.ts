@@ -8,7 +8,7 @@ const port: number = parseInt(process.env.PORT) || 9090;
 const host: string = process.env.HOST;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   await app.listen(port);
 
   Logger.log(`Server running on ${host}:${port}`, 'Main.ts');
